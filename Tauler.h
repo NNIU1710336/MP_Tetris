@@ -20,7 +20,7 @@ public:
 	}
 	int eliminarFiles(const Figura& figura);
 	bool comprovarGir(const Figura& figura, DireccioGir direccion) const;
-	bool comprovarMov(const Figura& figura, int dirX, int x, int y) const;
+	bool comprovarMov(const Figura& figura, int x, int y) const;
 	void borrarFila(int fila);
 	bool filaBuida(int fila) const;
 	bool filaPlena(int fila) const;
@@ -28,11 +28,10 @@ public:
 	ColorFigura getTauler(int i, int j) const { return m_tauler[i][j]; };
 private:
 	ColorFigura m_tauler[MAX_FILA][MAX_COL];
-}
+};
 
 ifstream& operator>>(ifstream& input, Tauler& tauler);
-
-ostream& operator<<(ostream& output, const Tauler tauler);
+ofstream& operator<<(ofstream& output, const Tauler tauler);
 
 
 #endif
