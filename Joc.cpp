@@ -2,94 +2,62 @@
 #include "Tauler.h"
 using namespace std;
 
+void Joc::inicialitza(const string& nomFitxer) {
 
-void Joc::inicialitza(const string& nomFitxer)
-{
-    ifstream fitxer;
-    fitxer.open(nomFitxer.c_str());
-    int tipus, fila, columna, gir, color;
+	ifstream fitxer;
+	fitxer.open(nomFitxer);
 
-    if (!fitxer.is_open()) {
-        cerr << "Error: No es pot obrir el fitxer " << nomFitxer << endl;
-        return;
-    }
-
-    fitxer >> tipus >> fila >> columna >> gir;
-    while (!fitxer.eof()) {
-        for (int i = 0; i < 8; i++) {
-            for (int j = 0; j < 8; j++) {
-                ColorFigura colorFigura;
-                fitxer >> color;
-                colorFigura = static_cast<ColorFigura>(color);
-                m_tauler.setTauler(i, j, colorFigura); 
-            }
-        }
-    }
-
-    fitxer.close();
-}
-
-
-
-
-void Joc::AfegeixFitxa()
-{
-    m_tauler.setTauler(3, 1, COLOR_MAGENTA); 
-    m_tauler.setTauler(3, 2, COLOR_MAGENTA);
-    m_tauler.setTauler(3, 3, COLOR_MAGENTA);
-    m_tauler.setTauler(4, 2, COLOR_MAGENTA);
-}
-
-void Joc::escriuTauler(const string& nomFitxer)
-{
-    ofstream fitxer(nomFitxer);
-    if (!fitxer.is_open()) {
-        cout << "Error al abrir el archivo." << endl;
-        return;
-    }
-
-    AfegeixFitxa();
-
-    for (int i = 0; i < 8; i++)
-    {
-        for (int j = 0; j < 8; j++)
-        {
-
-            fitxer << m_tauler.getTauler(i,j);
-        }
-        fitxer << endl;
-    }
-
-    fitxer.close();
+	if (fitxer.is_open()) {
+	fitxer >> m_figura;
+	fitxer >> m_tauler;
+	fitxer.close();
+	}
+	ColocarFigura();
+	
 }
 
 void Joc::ColocarFigura()
 {
-	int i = 0;
-	int j = 0;
-	int k = 0;
+    int figuraX = m_figura.getX();
+    int figuraY = m_figura.getY();
 
-	while (i < m_figura.getAltura() && k < 4)
-	{
-		while (j < m_figura.getAmplada() && k < 4)
-		{
-			if (m_figura.getTipus(i, j))
-			{
-				m_tauler.setTauler(m_figura.getX() + i, m_figura.getY() + j, m_figura.getColor());
-				k++;
-			}
-			j++;
-		}
-		j = 0;
-		i++;
+    for (int i = 0; i < m_figura.getAmplada(); i++)
+    {
+        for (int j = 0; j < m_figura.getAltura(); j++)
+        {
+            if (m_figura.getMatriu(i, j) == 1)
+            {
+                m_tauler.setTauler(figuraX + i, figuraY + j, m_figura.getColor());
+            }
+        }
+    }
+}
+
+
+
+
+
+void Joc::escriuTauler(const string& nomFitxer)
+{
+
+	ofstream fitxer;
+	fitxer.open(nomFitxer);
+
+	if (fitxer.is_open()) {
+	fitxer << m_tauler;
+	fitxer.close();
 	}
 }
+
+
 
 void Joc::mouFigura(int dirX)
 {
 	Figura figuraActual = m_figura;
 	figuraActual.MouFiguraHoritzontal(dirX);
-	if (m_tauler.comprovarMov(figuraActual, dirX, figuraActual.getX(), figuraActual.getY())) {
+	if (m_tauler.comprovarMov(figuraActual, figuraActual.getX(), figuraActual.getY())) 
+	{
+	    ColocarFigura();
 		m_figura = figuraActual;
 	}
 }
@@ -98,15 +66,11 @@ int Joc::baixaFigura()
 {
     Figura figuraActual = m_figura;
 
-    if (m_tauler.comprovarMov(figuraActual, 0, figuraActual.getX(), figuraActual.getY())) 
+    if (m_tauler.comprovarMov(figuraActual, figuraActual.getX(), figuraActual.getY())) 
     {
         figuraActual.baixar();
         m_figura = figuraActual;
-        return 1;
-    }
-    else {
         ColocarFigura();
-        return 0;
     }
 }
 
