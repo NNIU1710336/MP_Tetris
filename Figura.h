@@ -43,17 +43,13 @@ typedef enum
 class Figura
 {
 public:
-	Figura(int m_tipus, int m_color, int m_x, int m_y)
-	{
-		m_tipus = NO_FIGURA;
-		m_x = 0;
-		m_y = 0;
-		m_color = NO_COLOR;
-	}
+    Figura() : m_tipus(NO_FIGURA), m_color(NO_COLOR), m_amplada(MAX_AMPLADA),
+        m_altura(MAX_ALCADA), m_fila(0), m_columna(0), m_gir(0) {};
 	void inicialitza(TipusFigura tipusFigura, int Gir, int x, int y);
 	void girarFigura(DireccioGir direccio);
 	void MouFiguraHoritzontal(int dirX);
 	void baixar();
+	int getPosFigura(int fila, int columna) const { return m_Matriu[fila][columna]; }
 	int getAltura() const { return m_altura; }
 	int getAmplada() const { return m_amplada; }
 	int getMatriu (int i, int j) const { return m_Matriu[i][j]; };
@@ -84,17 +80,6 @@ private:
 	int m_amplada;
 };
 
-ifstream& operator>>(ifstream& input, Figura& figura)
-{
-    int tipus;
-    int fila, columna;
-    int gir;
-
-    input >> tipus >> fila >> columna >> gir;
-    TipusFigura m_tipus = static_cast<TipusFigura>(tipus);
-    figura.inicialitza(m_tipus, fila, columna, gir);
-
-    return input;
-}
+ifstream& operator>>(ifstream& input, Figura& figura);
 
 #endif
