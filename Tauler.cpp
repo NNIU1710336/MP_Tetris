@@ -18,7 +18,7 @@ ifstream& operator>>(ifstream& input, Tauler& tauler) {
 }
 
 
-ostream& operator<<(ostream& output, const Tauler tauler)
+ofstream& operator<<(ofstream& output, const Tauler tauler)
 {
     for (int i = 0; i < MAX_FILA; i++)
     {
@@ -88,48 +88,47 @@ bool Tauler::comprovarGir(const Figura& figura, DireccioGir direccio) const
     Figura figuraSimulada = figura;
     figuraSimulada.girarFigura(direccio);
 
-    int altura = figuraSimulada.getAltura();
-    int amplada = figuraSimulada.getAmplada();
-    int fila = figuraSimulada.getFila();
-    int columna = figuraSimulada.getColumna();
+int PosX = figuraSimulada.getX();
+int PosY = figuraSimulada.getY();
 
-    if (columna < 0 || columna + amplada > MAX_COL || fila + altura > MAX_FILA) {
-        return false;
-    }
-
-    for (int i = 0; i < altura; ++i) {
-        for (int j = 0; j < amplada; ++j) {
-            if (m_tauler[i][j] != COLOR_NEGRE) {
-                if (m_tauler[fila + i][columna + j] != 0) {
-                    return false;
-                }
-            }
-        }
-    }
-
-    return true;
-}
-
-
-bool Tauler::comprovarMov(const Figura& figura, int dirX, int x, int y) const
-{
-    for (int i = 0; i < MAX_ALCADA; i++)
+figuraSimulada.girarFigura(direccio);
+    for (int i = 0; i < MAX_ALCADA; ++i) 
     {
-        for (int j = 0; j < MAX_AMPLADA; j++)
+        for (int j = 0; j < MAX_AMPLADA; ++j) 
         {
-            if (figura.getMatriu(i, j) != 0)
-            {
-                int ValX = x + j;
-                int ValY = y + i;
-                if (ValX < 0 || ValX >= 8 || ValY < 0 || ValY >= 8 || m_tauler[i][j] != 0)
+            int novaPosX = PosX + i;
+            int novaPosY = PosY + j;
+                if (novaPosX < 0 ||novaPosX > MAX_COL || novaPosY < 0 ||novaPosY > MAX_FILA)
                 {
                     return false;
                 }
+            
+            if (m_tauler[novaPosX][novaPosY] != COLOR_NEGRE) {
+                    return false;
+                }
             }
         }
-
         return true;
     }
+
+bool Tauler::comprovarMov(const Figura& figura, int x, int y) const
+{
+    bool mov = true;
+    int i = 0;
+    while (i <figura.getAltura() && mov)
+    {
+        int j = 0;
+        while (j < figura.getAmplada() && mov)
+        {
+            if (figura.getPosFigura(i, j) != COLOR_NEGRE)
+                if (x + j >= MAX_COL || x + j < 0 || y + i < 0 || y + i >= MAX_COL || m_tauler[y + i][x+j] != COLOR_NEGRE)
+                mov = false;
+                j++;
+        }
+        i++;
+    }
+    
+    return mov;
 }
 
 
