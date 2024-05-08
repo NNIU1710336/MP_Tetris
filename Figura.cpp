@@ -1,175 +1,207 @@
 #include "Figura.h"
-#include <iostream>
-using namespace std;
 
-void Figura::inicialitza(TipusFigura tipus, int y, int x, int gir)
+Figura::Figura()
 {
-    m_tipus = tipus;
-    m_x = x;
-    m_y = y;
-    
-    for (int i = 0; i < MAX_ALCADA; i++)
-        for (int j = 0; j < MAX_AMPLADA; j++)
-            m_Matriu[i][j] = 0;
-
-    switch (m_tipus) 
-    {
-    case TipusFigura::FIGURA_O:
-        m_color = COLOR_GROC;
-        m_fila = 2;
-        m_columna = 2;
-        m_x = x - 1;
-        m_y = y - 1;
-        m_Matriu[0][0] = 1;
-        m_Matriu[0][1] = 1;
-        m_Matriu[1][0] = 1;
-        m_Matriu[1][1] = 1;
-        break;
-
-    case TipusFigura::FIGURA_L:
-    {
-        m_color = COLOR_TARONJA;
-        m_fila = 3;
-        m_columna = 3;
-        m_x = x - 1;
-        m_y = y - 1;
-        m_Matriu[0][2] = 1;
-        m_Matriu[1][0] = 1;
-        m_Matriu[1][1] = 1;
-        m_Matriu[1][2] = 1;
-    }
-    break;
-
-    case TipusFigura::FIGURA_T:
-    {
-        m_color = COLOR_MAGENTA;
-        m_fila = 3;
-        m_columna = 3;
-        m_x = x - 1;
-        m_y = y - 1;
-        m_Matriu[0][1] = 1;
-        m_Matriu[1][0] = 1;
-        m_Matriu[1][1] = 1;
-        m_Matriu[1][2] = 1;
-    }
-    break;
-
-    case TipusFigura::FIGURA_S:
-
-    {
-        m_color = COLOR_VERD;
-        m_fila = 3;
-        m_columna = 3;
-        m_x = x - 1;
-        m_y = y - 1;
-        m_Matriu[0][1] = 1;
-        m_Matriu[0][2] = 1;
-        m_Matriu[1][0] = 1;
-        m_Matriu[1][1] = 1;
-    }
-
-    break;
-
-    case TipusFigura::FIGURA_Z:
-    {
-        m_color = COLOR_VERMELL;
-        m_fila = 3;
-        m_columna = 3;
-        m_x = x - 1;
-        m_y = y - 1;
-        m_Matriu[0][0] = 1;
-        m_Matriu[0][1] = 1;
-        m_Matriu[1][1] = 1;
-        m_Matriu[1][2] = 1;
-    }
-
-    break;
-
-    case TipusFigura::FIGURA_I:
-
-    {
-        m_color = COLOR_BLAUCEL;
-        m_fila = 4;
-        m_columna = 4;
-        m_x = x - 1;
-        m_y = y - 1;
-        m_Matriu[1][0] = 1;
-        m_Matriu[1][1] = 1;
-        m_Matriu[1][2] = 1;
-        m_Matriu[1][3] = 1;
-    }
-    break;
-    case TipusFigura::FIGURA_J:
-    {
-        m_color = COLOR_BLAUFOSC;
-        m_fila = 3;
-        m_columna = 3;
-        m_x = x - 1;
-        m_y = y - 1;
-        m_Matriu[0][0] = 1;
-        m_Matriu[1][0] = 1;
-        m_Matriu[1][1] = 1;
-        m_Matriu[1][2] = 1;
-    }
-    break;
-    }
-
-    for (int i = 0; i < gir; i++)
-    {
-        girarFigura(GIR_HORARI);
-    }
+	inicialitza(NO_FIGURA, 0, 0, 0);
 }
 
-
-ifstream& operator>>(ifstream& input, Figura& figura)
+void Figura::inicialitza(TipusFigura tipusFigura, int codiGir, int x, int y)
 {
-    int tipus;
-    int fila, columna;
-    int gir;
+	tFigura = tipusFigura;
+	m_codiGir = 0;
 
-    input >> tipus >> fila >> columna >> gir;
-    TipusFigura m_tipus = static_cast<TipusFigura>(tipus);
-    figura.inicialitza(m_tipus, fila, columna, gir);
+	for (int i = 0; i < 4; i++)
+	{
+		for (int j = 0; j < 4; j++)
+		{
+			matriuFigura[i][j] = 0;
+		}
+	}
+	switch (tFigura)
+	{
+	case FIGURA_O:
+		color = COLOR_GROC;
+		files = 2;
+		columnes = 2;
+		m_x = x - 1;
+		m_y = y - 1;
+		matriuFigura[0][0] = 1;
+		matriuFigura[0][1] = 1;
+		matriuFigura[1][0] = 1;
+		matriuFigura[1][1] = 1;
+		break;
+	case FIGURA_I:
+		color = COLOR_BLAUCEL;
+		files = 4;
+		columnes = 4;
+		m_x = x - 1;
+		m_y = y - 1;
+		matriuFigura[1][0] = 1;
+		matriuFigura[1][1] = 1;
+		matriuFigura[1][2] = 1;
+		matriuFigura[1][3] = 1;
+		break;
+	case FIGURA_T:
+		color = COLOR_MAGENTA;
+		files = 3;
+		columnes = 3;
+		m_x = x - 1;
+		m_y = y - 1;
+		matriuFigura[0][1] = 1;
+		matriuFigura[1][0] = 1;
+		matriuFigura[1][1] = 1;
+		matriuFigura[1][2] = 1;
+		break;
+	case FIGURA_L:
+		color = COLOR_TARONJA;
+		files = 3;
+		columnes = 3;
+		m_x = x - 1;
+		m_y = y - 1;
+		matriuFigura[0][2] = 1;
+		matriuFigura[1][0] = 1;
+		matriuFigura[1][1] = 1;
+		matriuFigura[1][2] = 1;
+		break;
+	case FIGURA_J:
+		color = COLOR_BLAUFOSC;
+		files = 3;
+		columnes = 3;
+		m_x = x - 1;
+		m_y = y - 1;
+		matriuFigura[0][0] = 1;
+		matriuFigura[1][0] = 1;
+		matriuFigura[1][1] = 1;
+		matriuFigura[1][2] = 1;
+		break;
+	case FIGURA_Z:
+		color = COLOR_VERMELL;
+		files = 3;
+		columnes = 3;
+		m_x = x - 1;
+		m_y = y - 1;
+		matriuFigura[0][0] = 1;
+		matriuFigura[0][1] = 1;
+		matriuFigura[1][1] = 1;
+		matriuFigura[1][2] = 1;
+		break;
+	case FIGURA_S:
+		color = COLOR_VERD;
+		files = 3;
+		columnes = 3;
+		m_x = x - 1;
+		m_y = y - 1;
+		matriuFigura[0][1] = 1;
+		matriuFigura[0][2] = 1;
+		matriuFigura[1][0] = 1;
+		matriuFigura[1][1] = 1;
+	}
 
-    return input;
-}
-
-void Figura::MouFiguraHoritzontal(int dirX)
-{
-	m_columna += dirX;
+	for (int i = 0; i < codiGir; i++)
+	{
+		girarFigura(GIR_HORARI);
+	}
 }
 
 void Figura::baixar()
 {
-	m_y += 1;
+	m_y++;
+}
+
+void Figura::moureFigura(int dirX)
+{
+	m_x += dirX;
 }
 
 void Figura::girarFigura(DireccioGir direccio)
 {
-    int novaMatriu[MAX_AMPLADA][MAX_ALCADA];
-if (direccio == GIR_HORARI)
-{
-    for (int i = 0; i < m_altura; ++i) {
-        for (int j = 0; j < m_amplada; ++j) {
-            novaMatriu[j][m_altura - 1 - i] = m_Matriu[i][j];
-        }
-    }
-
-    for (int i = 0; i < m_amplada; ++i) 
-    {
-        for (int j = 0; j < m_altura; ++j) 
-        {
-            m_Matriu[i][j] = novaMatriu[i][j + 1];
-        }
-    }
-
-    swap(m_altura, m_amplada);
+	if (!direccio)
+	{
+		transposarMatriu(matriuFigura);
+		invertirColumnes(matriuFigura);
+		if (direccio != 3)
+			m_codiGir++;
+		else m_codiGir = 0;
+	}
+	else
+	{
+		transposarMatriu(matriuFigura);
+		invertirFiles(matriuFigura);
+		if (direccio != 0)
+			m_codiGir--;
+		else m_codiGir = 3;
+	}
 }
-else
+
+
+void Figura::invertirFiles(int matriu[][4])
 {
-    for (int i = 0; i < 3; i++)
-    {
-        girarFigura(GIR_HORARI);
-    }
+	int matriuAux[4][4];
+	for (int i = 0; i < files; i++)
+	{
+		for (int j = 0; j < columnes; j++)
+		{
+			matriuAux[i][j] = matriu[files - i - 1][j];
+		}
+	}
+
+	for (int i = 0; i < 4; i++)
+	{
+		for (int j = 0; j < 4; j++)
+		{
+			matriu[i][j] = matriuAux[i][j];
+		}
+	}
 }
+
+void Figura::invertirColumnes(int matriu[][4])
+{
+	int matriuAux[4][4];
+	for (int i = 0; i < files; i++)
+	{
+		for (int j = 0; j < columnes; j++)
+		{
+			matriuAux[i][j] = matriu[i][columnes - j - 1];
+		}
+	}
+
+	for (int i = 0; i < 4; i++)
+	{
+		for (int j = 0; j < 4; j++)
+		{
+			matriu[i][j] = matriuAux[i][j];
+		}
+	}
+
+}
+void Figura::transposarMatriu(int matriu[][4])
+{
+	int matriuF[4][4];
+	for (int i = 0; i < files; i++)
+	{
+		for (int j = 0; j < columnes; j++)
+		{
+			matriuF[i][j] = matriu[j][i];
+		}
+	}
+
+	for (int i = 0; i < 4; i++)
+	{
+		for (int j = 0; j < 4; j++)
+		{
+			matriu[i][j] = matriuF[i][j];
+		}
+	}
+}
+ifstream& operator>>(ifstream& input, Figura& figura)
+{
+	int tFigura;
+	int x, y;
+	int codiGir;
+
+	input >> tFigura >> y >> x >> codiGir;
+	TipusFigura f = static_cast<TipusFigura>(tFigura);
+	figura.inicialitza(f, codiGir, x, y);
+
+	return input;
 }
