@@ -21,8 +21,8 @@ void Figura::inicialitza(TipusFigura tipusFigura, int codiGir, int x, int y)
 	{
 	case FIGURA_O:
 		color = COLOR_GROC;
-		files = 2;
-		columnes = 2;
+		m_files = 2;
+		m_columnes = 2;
 		m_x = x - 1;
 		m_y = y - 1;
 		matriuFigura[0][0] = 1;
@@ -32,8 +32,8 @@ void Figura::inicialitza(TipusFigura tipusFigura, int codiGir, int x, int y)
 		break;
 	case FIGURA_I:
 		color = COLOR_BLAUCEL;
-		files = 4;
-		columnes = 4;
+		m_files = 4;
+		m_columnes = 4;
 		m_x = x - 1;
 		m_y = y - 1;
 		matriuFigura[1][0] = 1;
@@ -43,8 +43,8 @@ void Figura::inicialitza(TipusFigura tipusFigura, int codiGir, int x, int y)
 		break;
 	case FIGURA_T:
 		color = COLOR_MAGENTA;
-		files = 3;
-		columnes = 3;
+		m_files = 3;
+		m_columnes = 3;
 		m_x = x - 1;
 		m_y = y - 1;
 		matriuFigura[0][1] = 1;
@@ -54,8 +54,8 @@ void Figura::inicialitza(TipusFigura tipusFigura, int codiGir, int x, int y)
 		break;
 	case FIGURA_L:
 		color = COLOR_TARONJA;
-		files = 3;
-		columnes = 3;
+		m_files = 3;
+		m_columnes = 3;
 		m_x = x - 1;
 		m_y = y - 1;
 		matriuFigura[0][2] = 1;
@@ -65,8 +65,8 @@ void Figura::inicialitza(TipusFigura tipusFigura, int codiGir, int x, int y)
 		break;
 	case FIGURA_J:
 		color = COLOR_BLAUFOSC;
-		files = 3;
-		columnes = 3;
+		m_files = 3;
+		m_columnes = 3;
 		m_x = x - 1;
 		m_y = y - 1;
 		matriuFigura[0][0] = 1;
@@ -76,8 +76,8 @@ void Figura::inicialitza(TipusFigura tipusFigura, int codiGir, int x, int y)
 		break;
 	case FIGURA_Z:
 		color = COLOR_VERMELL;
-		files = 3;
-		columnes = 3;
+		m_files = 3;
+		m_columnes = 3;
 		m_x = x - 1;
 		m_y = y - 1;
 		matriuFigura[0][0] = 1;
@@ -87,8 +87,8 @@ void Figura::inicialitza(TipusFigura tipusFigura, int codiGir, int x, int y)
 		break;
 	case FIGURA_S:
 		color = COLOR_VERD;
-		files = 3;
-		columnes = 3;
+		m_files = 3;
+		m_columnes = 3;
 		m_x = x - 1;
 		m_y = y - 1;
 		matriuFigura[0][1] = 1;
@@ -137,11 +137,11 @@ void Figura::girarFigura(DireccioGir direccio)
 void Figura::invertirFiles(int matriu[][4])
 {
 	int matriuAux[4][4];
-	for (int i = 0; i < files; i++)
+	for (int i = 0; i < m_files; i++)
 	{
-		for (int j = 0; j < columnes; j++)
+		for (int j = 0; j < m_columnes; j++)
 		{
-			matriuAux[i][j] = matriu[files - i - 1][j];
+			matriuAux[i][j] = matriu[m_files - i - 1][j];
 		}
 	}
 
@@ -157,11 +157,11 @@ void Figura::invertirFiles(int matriu[][4])
 void Figura::invertirColumnes(int matriu[][4])
 {
 	int matriuAux[4][4];
-	for (int i = 0; i < files; i++)
+	for (int i = 0; i < m_files; i++)
 	{
-		for (int j = 0; j < columnes; j++)
+		for (int j = 0; j < m_columnes; j++)
 		{
-			matriuAux[i][j] = matriu[i][columnes - j - 1];
+			matriuAux[i][j] = matriu[i][m_columnes - j - 1];
 		}
 	}
 
@@ -177,9 +177,9 @@ void Figura::invertirColumnes(int matriu[][4])
 void Figura::transposarMatriu(int matriu[][4])
 {
 	int matriuF[4][4];
-	for (int i = 0; i < files; i++)
+	for (int i = 0; i < m_files; i++)
 	{
-		for (int j = 0; j < columnes; j++)
+		for (int j = 0; j < m_columnes; j++)
 		{
 			matriuF[i][j] = matriu[j][i];
 		}
@@ -193,6 +193,23 @@ void Figura::transposarMatriu(int matriu[][4])
 		}
 	}
 }
+
+void Figura::dibuixaFigura() //Funció per dibuixar una figura.
+{
+	for (int i = 0; i < m_files; i++) //Recorrem cada posició que ocupa la figura i la pintem amb el seu color corresponent a la posició corresponent.
+	{
+		for (int j = 0; j < m_columnes; j++)
+		{
+			if (matriuFigura[i][j] != 0)
+			{
+				GraphicManager::getInstance()->drawSprite((IMAGE_NAME)(color + 1), //Color de la figura.
+					POS_X_TAULER + ((m_x + j+1) * MIDA_QUADRAT), POS_Y_TAULER + ((m_y + i) * MIDA_QUADRAT), false);
+			}
+
+		}
+	}
+}
+
 ifstream& operator>>(ifstream& input, Figura& figura)
 {
 	int tFigura;
